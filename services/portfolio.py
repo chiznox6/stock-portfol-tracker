@@ -44,7 +44,7 @@ def view_profit_loss():
         if t.type == TransactionType.BUY:
             holdings[t.stock_symbol]["shares"] += t.shares
             holdings[t.stock_symbol]["cost"] += t.shares * t.price_per_share
-        else:
+        else:  # SELL
             holdings[t.stock_symbol]["shares"] -= t.shares
             realized += t.shares * t.price_per_share
 
@@ -56,3 +56,21 @@ def view_profit_loss():
     session.close()
     print(f" Realized Profit: ${realized:.2f}")
     print(f" Unrealized (current holdings): ${unrealized:.2f}")
+
+def view_transactions():
+    """Show all transactions with IDs (for delete/reference)."""
+    session = SessionLocal()
+    transactions = session.query(Transaction).all()
+
+    table = []
+    for t in transactions:
+        table.append([
+            t.id,                # Transaction ID
+            t.stock_symbol,
+            t.shares,
+            f"${t.price_per_share:.2f}",
+            t.type.name
+        ])
+
+    session.close()
+    print(tabulate(table, headers=["ID", "Symbol", "Shares", "Price", "Type"], tablefmt="pretty"))

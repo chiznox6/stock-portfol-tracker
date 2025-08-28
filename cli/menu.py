@@ -1,6 +1,22 @@
-from services.transactions import log_transaction
+from services.transactions import log_transaction, delete_transaction
 from services.portfolio import view_portfolio, view_profit_loss
 from services.goals import set_goal, view_goals
+from utils.db import SessionLocal
+from models.transaction import Transaction, TransactionType
+from tabulate import tabulate
+
+def show_transactions():
+    """Display all transactions with IDs"""
+    session = SessionLocal()
+    transactions = session.query(Transaction).all()
+    table = []
+    for t in transactions:
+        table.append([t.id, t.stock_symbol, t.shares, f"${t.price_per_share:.2f}", t.type.name])
+    session.close()
+    if table:
+        print(tabulate(table, headers=["ID", "Symbol", "Shares", "Price", "Type"], tablefmt="pretty"))
+    else:
+        print("No transactions found.")
 
 def main_menu():
     while True:
@@ -11,6 +27,7 @@ def main_menu():
         print("4. Set investment goal")
         print("5. View goals")
         print("6. Exit")
+        print("7. Delete transaction")
 
         choice = input("Enter choice: ")
 
@@ -38,6 +55,14 @@ def main_menu():
         elif choice == "6":
             print(" Goodbye!")
             break
+
+        elif choice == "7":
+            show_transactions()
+            try:
+                transaction_id = int(input("Enter transaction ID to delete: "))
+                delete_transaction(transaction_id)
+            except ValueError:
+                print("Invalid input. Please enter a numeric ID.")
 
         else:
             print(" Invalid choice, try again.")
