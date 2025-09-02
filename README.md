@@ -13,8 +13,7 @@ It is designed for beginner and small investors who find spreadsheets error-pron
 
 ## video link 
 
-Here is the link to the video: https://drive.google.com/file/d/1J7L1gJEIoq4gjNOPj1V3nO9ghw4FulRB/view?usp=sharing
-
+Here is the link to the video: https://drive.google.com/file/d/1xoYeO95GqDcA6GvtY7Br79JFNGLvJtWd/view?usp=sharing
 
 
 ## Features
