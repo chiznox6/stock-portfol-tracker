@@ -35,7 +35,10 @@ Here is the link to the video: https://drive.google.com/file/d/1J7L1gJEIoq4gjNOP
 5. **View Investment Goals**  
    Lists all goals set.
 
-6. **Delete Transactions**  
+6. **exit**
+    exits the interface.
+
+7. **Delete Transactions**  
    Remove a transaction by its ID from the database.
 
 
