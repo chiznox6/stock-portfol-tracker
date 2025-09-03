@@ -65,7 +65,7 @@ stock-portfol-tracker/
 │── README.md            # Documentation
 │── main.py              # Runs the CLI (imports cli/menu.py)
 │── portfolio.db         # SQLite database (auto-created at runtime)
-
+|__demo.py
 
 ## Installation & Setup
 
