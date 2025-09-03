@@ -128,30 +128,35 @@ alembic history
 This is a step-by-step guide to run the project for a clean demonstration from a fresh start.
 
 **Step 1: Activate the Virtual Environment**
+
 (You only need to do this once per terminal session)
 ```bash
 pipenv shell
 ```
 
 **Step 2: Clean Up the Old Database**
+
 To ensure you start fresh for the demo, delete the old database file if it exists.
 ```bash
 rm portfolio.db
 ```
 
 **Step 3: Create the Database From Migrations**
+
 This command reads the migration scripts and creates a new, empty `portfolio.db` file with the correct table structures.
 ```bash
 alembic upgrade head
 ```
 
 **Step 4: Seed the Database with Sample Data**
+
 This populates the new database with sample data, making the demo more interesting.
 ```bash
 python seed.py
 ```
 
 **Step 5: Run the Application**
+
 Now, start the main CLI application.
 ```bash
 python main.py
