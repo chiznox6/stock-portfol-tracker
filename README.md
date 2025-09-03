@@ -1,136 +1,173 @@
-# Stock Portfolio Tracker
+## Stock Portfolio Tracker
 
-A simple **Python CLI application** that helps users manage and track their stock investments.  
+A simple Python CLI application that helps users manage and track their stock investments.
 It is designed for beginner and small investors who find spreadsheets error-prone or existing apps too complex.
 
-## GitHub Repository:
+## GitHub Repository
 
- [Stock Portfolio Tracker](https://github.com/chiznox6/stock-portfol-tracker.git)
-
----
+[Stock Portfolio Tracker](https://github.com/your-username/stock-portfol-tracker)
 
 
+## Demo Video
 
-## video link 
-
-Here is the link to the video: https://drive.google.com/file/d/1xoYeO95GqDcA6GvtY7Br79JFNGLvJtWd/view?usp=sharing
+[Watch Demo](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
 
 
 ## Features
 
+1. Log Stock Transactions (Buy/Sell)
+Record stock symbol, number of shares, price per share, and transaction type.
 
-1. **Log Stock Transactions (Buy/Sell)**  
-   Record stock symbol, number of shares, price per share, and transaction type.
+2. View Portfolio Overview
+Displays current holdings with total shares and average price per stock.
 
-2. **View Portfolio Overview**  
-   Displays current holdings with total shares and average price per stock.
+3. View Profit/Loss Summary
+Shows realized profits (from sold shares) and unrealized profits (current holdings).
 
-3. **View Profit/Loss Summary**  
-   Shows realized profits (from sold shares) and unrealized profits (current holdings).
+4. Set Investment Goals
+Define personal investment goals with a description and target value.
 
-4. **Set Investment Goals**  
-   Define personal investment goals with a description and target value.
+5. View Investment Goals
+Lists all goals set.
 
-5. **View Investment Goals**  
-   Lists all goals set.
+6. Delete Transactions
+Remove a transaction by its ID from the database.
 
-6. **exit**
-    exits the interface.
-
-7. **Delete Transactions**  
-   Remove a transaction by its ID from the database.
-
-
+7. Exit the Application
 
 ## Project Structure
 
+stock-portfol-tracker/
 │── cli/
-│ ├── main.py # CLI entry point (menu and commands)
+│   ├── menu.py          # Menu logic
+│
 │── models/
-│ ├── init.py # Package init
-│ ├── database.py # Database setup (SQLAlchemy engine, session)
-│ ├── transaction.py # Transaction model (buy/sell)
-│ ├── goal.py # Investment goals model
+│   ├── __init__.py
+│   ├── user.py          # User model
+│   ├── transaction.py   # Transaction model (buy/sell)
+│   ├── goal.py          # Investment goals model
+│
 │── services/
-│ ├── init.py
-│ ├── portfolio_service.py # Portfolio calculations
-│ ├── transaction_service.py # Transaction logic
-│ ├── goal_service.py # Goal tracking logic
-│── requirements.txt # Dependencies
-│── README.md # Documentation
-│── main.py # Runs the CLI (imports cli/main.py)
+│   ├── __init__.py
+│   ├── transactions.py  # Transaction logic
+│   ├── portfolio.py     # Portfolio calculations
+│   ├── goals.py         # Goal tracking logic
+│
+│── utils/
+│   ├── __init__.py
+│   ├── db.py            # Database setup (SQLAlchemy engine, session, Base)
+│
+│── migrations/          # Alembic migrations
+│── requirements.txt     # Dependencies
+│── Pipfile              # Dependencies (alternative to requirements.txt)
+│── Pipfile.lock
+│── README.md            # Documentation
+│── main.py              # Runs the CLI (imports cli/menu.py)
+│── portfolio.db         # SQLite database (auto-created at runtime)
 
-
-
----
 
 ## Installation & Setup
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/chiznox6/stock-portfol-tracker.git
-   cd stock-portfol-tracker
 
-2. Create and activate a virtual environment:
+```bash
+git clone https://github.com/your-username/stock-portfol-tracker.git
+cd stock-portfol-tracker
+```
 
-python -m venv venv
-source venv/bin/activate      # Mac/Linux
-venv\Scripts\activate         # Windows
+2. Install Pipenv (if not installed):
+
+```bash
+pip install pipenv
+```
+
+3. Install dependencies using Pipenv:
+
+```bash
+pipenv install
+```
+
+4. Activate the virtual environment:
+
+```bash
+pipenv shell
+```
 
 
-3. Install dependencies:
+## Database & Alembic Migrations
 
-pip install -r requirements.txt
+1. This project uses Alembic for database migrations.
 
+Initialize Alembic (already done in this repo):
 
-4. Usage
+```bash
+alembic init migrations
+```
 
-Run the program with:
+2. Create a new migration after changing models:
 
+```bash
+alembic revision --autogenerate -m "description_of_change"
+```
+
+3. Apply migrations to the database:
+
+```bash
+alembic upgrade head
+```
+
+4. Check current migration history:
+
+```bash
+alembic history
+```
+
+## Usage
+
+Run the CLI app with:
+
+```bash
 python main.py
+```
 
-You will see a menu:
+## You will see:
 
- Stock Portfolio Tracker
+```
+Stock Portfolio Tracker
 1. Log transaction (Buy/Sell)
 2. View portfolio overview
 3. View profit/loss summary
 4. Set investment goal
 5. View goals
-6. Exit
-7. Delete transaction
+6. Delete transaction
+7. Exit
+```
 
+1 → Log a BUY or SELL transaction
 
-Option 1: Log a BUY or SELL transaction.
+2 → View current portfolio holdings
 
-Option 2: View current portfolio holdings.
+3 → View realized and unrealized profit/loss
 
-Option 3: View realized and unrealized profit/loss.
+4 → Set a new investment goal
 
-Option 4: Set a new investment goal.
+5 → View all investment goals
 
-Option 5: View all investment goals.
+6 → Exit the application
 
-Option 6: Exit the application.
+7 → Delete a transaction by its ID
 
-Option 7: Delete a transaction by its ID.
+## Requirements
 
-
-## REQUIREMENTS
-
-Python 3.10+
+Python 3.12
 
 SQLAlchemy
 
+Alembic
+
 tabulate
 
-Install them manually if needed:
-
-pip install sqlalchemy tabulate
-
-
-
-## LICENSE
+## License
 
 This project is for educational purposes only.
 Not intended for actual financial trading.

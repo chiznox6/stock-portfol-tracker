@@ -1,76 +1,68 @@
-from utils.db import SessionLocal
-from models.transaction import Transaction, TransactionType
+from models.database import SessionLocal
+from models.transaction import Transaction
 from tabulate import tabulate
 
-def view_portfolio():
+def view_portfolio(user_id: int):
+    """Show a user's current portfolio with shares and average price."""
     session = SessionLocal()
-    transactions = session.query(Transaction).all()
-    holdings = {}
+    try:
+        transactions = session.query(Transaction).filter_by(user_id=user_id).all()
+        holdings = {}
 
-    for t in transactions:
-        if t.stock_symbol not in holdings:
-            holdings[t.stock_symbol] = {"shares": 0, "cost": 0}
+        for t in transactions:
+            if t.symbol not in holdings:
+                holdings[t.symbol] = {"shares": 0, "cost": 0.0}
 
-        if t.type == TransactionType.BUY:
-            holdings[t.stock_symbol]["shares"] += t.shares
-            holdings[t.stock_symbol]["cost"] += t.shares * t.price_per_share
-        else:  # SELL
-            holdings[t.stock_symbol]["shares"] -= t.shares
-            holdings[t.stock_symbol]["cost"] -= t.shares * t.price_per_share
+            if t.type == "buy":
+                holdings[t.symbol]["shares"] += t.shares
+                holdings[t.symbol]["cost"] += t.shares * t.price
+            elif t.type == "sell":
+                holdings[t.symbol]["shares"] -= t.shares
+                holdings[t.symbol]["cost"] -= t.shares * t.price
 
-    table = []
-    for stock, data in holdings.items():
-        if data["shares"] > 0:
-            avg_price = data["cost"] / data["shares"]
+        table = []
+        for stock, data in holdings.items():
+            avg_price = (data["cost"] / data["shares"]) if data["shares"] > 0 else 0
+            table.append([stock, data["shares"], f"${avg_price:.2f}"])
+
+        if table:
+            print(tabulate(table, headers=["Stock", "Shares", "Avg Price"], tablefmt="pretty"))
         else:
-            avg_price = 0
-        table.append([stock, data["shares"], f"${avg_price:.2f}"])
+            print("No holdings found for this user.")
+    finally:
+        session.close()
 
-    session.close()
-    print(tabulate(table, headers=["Stock", "Shares", "Avg Price"], tablefmt="pretty"))
 
-def view_profit_loss():
+def view_profit_loss(user_id: int):
+    """Show realized and unrealized profits for a user's portfolio."""
     session = SessionLocal()
-    transactions = session.query(Transaction).all()
+    try:
+        transactions = session.query(Transaction).filter_by(user_id=user_id).all()
 
-    realized = 0
-    unrealized = 0
-    holdings = {}
+        realized = 0.0
+        holdings = {}
 
-    for t in transactions:
-        if t.stock_symbol not in holdings:
-            holdings[t.stock_symbol] = {"shares": 0, "cost": 0}
+        for t in transactions:
+            if t.symbol not in holdings:
+                holdings[t.symbol] = {"shares": 0, "cost": 0.0}
 
-        if t.type == TransactionType.BUY:
-            holdings[t.stock_symbol]["shares"] += t.shares
-            holdings[t.stock_symbol]["cost"] += t.shares * t.price_per_share
-        else:  # SELL
-            holdings[t.stock_symbol]["shares"] -= t.shares
-            realized += t.shares * t.price_per_share
+            if t.type == "buy":
+                holdings[t.symbol]["shares"] += t.shares
+                holdings[t.symbol]["cost"] += t.shares * t.price
+            elif t.type == "sell":
+                # realized profit = sale proceeds - proportional cost basis
+                avg_price = (
+                    holdings[t.symbol]["cost"] / holdings[t.symbol]["shares"]
+                    if holdings[t.symbol]["shares"] > 0 else 0
+                )
+                realized += (t.price - avg_price) * t.shares
+                holdings[t.symbol]["shares"] -= t.shares
+                holdings[t.symbol]["cost"] -= avg_price * t.shares
 
-    for stock, data in holdings.items():
-        if data["shares"] > 0:
-            avg_price = data["cost"] / data["shares"]
-            unrealized += data["shares"] * avg_price
+        # Unrealized = current cost basis (since no live market price provided)
+        unrealized = sum(data["cost"] for data in holdings.values() if data["shares"] > 0)
 
-    session.close()
-    print(f" Realized Profit: ${realized:.2f}")
-    print(f" Unrealized (current holdings): ${unrealized:.2f}")
-
-def view_transactions():
-    """Show all transactions with IDs (for delete/reference)."""
-    session = SessionLocal()
-    transactions = session.query(Transaction).all()
-
-    table = []
-    for t in transactions:
-        table.append([
-            t.id,                # Transaction ID
-            t.stock_symbol,
-            t.shares,
-            f"${t.price_per_share:.2f}",
-            t.type.name
-        ])
-
-    session.close()
-    print(tabulate(table, headers=["ID", "Symbol", "Shares", "Price", "Type"], tablefmt="pretty"))
+        print(f"Realized Profit: ${realized:.2f}")
+        print(f"Unrealized (book value of current holdings): ${unrealized:.2f}")
+    finally:
+        session.close()
