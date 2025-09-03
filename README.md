@@ -10,7 +10,7 @@ It is designed for beginner and small investors who find spreadsheets error-pron
 
 ## Demo Video
 
-[Watch Demo] (https://drive.google.com/file/d/1IruSAoJKBbeACDDFY8_eM8Dipaw9HxfK/view?usp=sharing)
+[Watch Demo] (https://drive.google.com/file/d/1Yxxnh5S8jdTasefDj1l5q59Z4H5PQNP3/view?usp=sharing)
 
 
 ## Features
@@ -57,6 +57,7 @@ stock-portfol-tracker/
 │   ├── __init__.py
 │   ├── db.py            # Database setup (SQLAlchemy engine, session, Base)
 │
+|__seed.py
 │── migrations/          # Alembic migrations
 │── requirements.txt     # Dependencies
 │── Pipfile              # Dependencies (alternative to requirements.txt)
