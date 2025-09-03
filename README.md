@@ -10,7 +10,7 @@ It is designed for beginner and small investors who find spreadsheets error-pron
 
 ## Demo Video
 
-[Watch Demo] (https://drive.google.com/file/d/1Yxxnh5S8jdTasefDj1l5q59Z4H5PQNP3/view?usp=sharing)
+[Watch Demo] (https://drive.google.com/file/d/1-nyivZUySSLqkwoWtvkoGWhjwxu6mtWX/view?usp=sharing)
 
 
 ## Features
